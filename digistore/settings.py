@@ -11,6 +11,7 @@ https://docs.djangoproject.com/en/5.2/ref/settings/
 """
 
 from pathlib import Path
+import os
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
@@ -20,12 +21,12 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 # See https://docs.djangoproject.com/en/5.2/howto/deployment/checklist/
 
 # SECURITY WARNING: keep the secret key used in production secret!
-SECRET_KEY = 'django-insecure-m!4v$25=yiixg$!e)i#i*(xiz7(i5=q8j8lkx(*r40mb@xfcu+'
+SECRET_KEY = os.environ.get("DJANGO_SECRET_KEY", "dev-insecure-key")
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = True
+DEBUG = os.environ.get("DJANGO_DEBUG", "1") == "1"
 
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = os.environ.get("DJANGO_HOSTS", "127.0.0.1,localhost").split(",")
 
 
 # Application definition
@@ -37,6 +38,10 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
+    "catalog.apps.CatalogConfig",
+    "accounts.apps.AccountsConfig",
+    "cart.apps.CartConfig",
+    "orders.apps.OrdersConfig"
 ]
 
 MIDDLEWARE = [
