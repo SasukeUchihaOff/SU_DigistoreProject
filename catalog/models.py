@@ -1,5 +1,7 @@
 from django.db import models
 from django.urls import reverse
+from django.conf import settings
+from django.core.validators import MinValueValidator, MaxValueValidator
 
 
 class Category(models.Model):
@@ -60,3 +62,63 @@ class Service(models.Model):
 
     def get_absolute_url(self):
         return reverse("catalog:service_detail", kwargs={"slug": self.slug})
+
+class Review(models.Model):
+    # CASCADE: reviews make no sense without their service
+    service = models.ForeignKey(
+        Service,
+        on_delete=models.CASCADE,
+        related_name="reviews",
+        verbose_name="Услуга",
+    )
+    # SET_NULL: the review stays when the user is deleted (needs null=True)
+    author = models.ForeignKey(
+        settings.AUTH_USER_MODEL,
+        on_delete=models.SET_NULL,
+        null=True,
+        related_name="reviews",
+        verbose_name="Автор",
+    )
+    rating = models.PositiveSmallIntegerField(
+        "Оценка",
+        validators=[MinValueValidator(1), MaxValueValidator(5)],
+    )
+    text = models.TextField("Текст", blank=True)
+    created_at = models.DateTimeField(auto_now_add=True)
+
+    class Meta:
+        verbose_name = "отзыв"
+        verbose_name_plural = "отзывы"
+        ordering = ["-created_at"]
+        constraints = [
+            # One review per author for each service
+            models.UniqueConstraint(fields=["service", "author"], name="uniq_review"),
+        ]
+
+    def __str__(self):
+        return f"{self.service} - {self.rating}/5"
+    
+class ServicePlan(models.Model):
+    service = models.ForeignKey(
+        Service,
+        on_delete=models.CASCADE,
+        related_name="plans",
+        verbose_name="Услуга",
+    )
+    name = models.CharField("Название тарифа", max_length=100)  # Basic / Standard / Premium
+    price = models.DecimalField("Цена, ₽", max_digits=10, decimal_places=2)
+    duration_days = models.PositiveSmallIntegerField("Срок, дней", default=3)
+    # List of included options, e.g. ["3 правки", "Исходники"]
+    options = models.JSONField("Опции", default=list, blank=True)
+    is_recommended = models.BooleanField("Рекомендуемый", default=False)
+
+    class Meta:
+        verbose_name = "тариф"
+        verbose_name_plural = "тарифы"
+        ordering = ["price"]
+        constraints = [
+            models.UniqueConstraint(fields=["service", "name"], name="uniq_plan_name"),
+        ]
+
+    def __str__(self):
+        return f"{self.service.title} - {self.name}"
