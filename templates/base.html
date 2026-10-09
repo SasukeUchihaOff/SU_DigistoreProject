@@ -1,0 +1,25 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+  <meta charset="utf-8">
+  <title>{% block title %}DigiStore{% endblock %}</title>
+  <link rel="stylesheet" href="{% static 'css/style.css' %}">
+</head>
+<body>
+  <header class="header">
+    <a class="logo" href="{% url 'home' %}">DigiStore</a>
+    <nav>
+      <a href="{% url 'catalog:service_list' %}">Услуги</a>
+      <a href="{% url 'cart:detail' %}">Корзина</a>
+      <a href="{% url 'orders:list' %}">Заказы</a>
+    </nav>
+  </header>
+
+  <main class="container">
+    {% block content %}{% endblock %}
+  </main>
+
+  <footer class="footer">© 2026 DigiStore</footer>
+</body>
+</html>

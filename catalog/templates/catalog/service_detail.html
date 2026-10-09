@@ -1,0 +1,19 @@
+{% extends "base.html" %}
+{% load catalog_extras %}
+
+{% block title %}{{ service.title }} — {{ block.super }}{% endblock %}
+
+{% block content %}
+  <h1>{{ service.title }}</h1>
+  <p class="price">{{ service.price|rubles }}</p>
+  <p>Срок исполнения: {{ service.days|days_ru }}</p>
+  <div>{{ service.description|linebreaks }}</div>
+
+  {# Add-to-cart form: POST only, no handling yet #}
+  <form method="post" action="{% url 'cart:add' service.id %}">
+    {% csrf_token %}
+    <button type="submit">В корзину</button>
+  </form>
+
+  <p><a href="{% url 'catalog:service_list' %}">← Назад к каталогу</a></p>
+{% endblock %}

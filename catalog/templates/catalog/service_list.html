@@ -1,0 +1,21 @@
+{% extends "base.html" %}
+
+{% block title %}Услуги — {{ block.super }}{% endblock %}
+
+{% block content %}
+  <h1>Электронные услуги</h1>
+  <div class="grid">
+    {% for service in services %}
+      {% include "catalog/_service_card.html" %}
+    {% empty %}
+      <p>Каталог пока пуст.</p>
+    {% endfor %}
+  </div>
+{% endblock %}
+
+{% load static %}
+<link rel="stylesheet" href="{% static 'css/style.css' %}">
+<img src="{% static 'img/logo.svg' %}" alt="DigiStore">
+
+{% load catalog_extras %}
+<span class="price">{{ service.price|rubles }}</span>

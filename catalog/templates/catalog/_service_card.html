@@ -1,0 +1,6 @@
+<article class="card">
+  <h2>{{ service.title }}</h2>
+  <p class="price">{{ service.price }} ₽</p>
+  <p>Срок: {{ service.days }} дн.</p>
+  <a href="{% url 'catalog:service_detail' service.slug %}">Подробнее</a>
+</article>

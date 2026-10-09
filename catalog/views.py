@@ -2,8 +2,22 @@ from django.shortcuts import render, redirect, get_object_or_404
 from django.http import HttpResponse, JsonResponse, Http404
 
 SERVICES = [
-    {"slug": "audit-sayta", "title": "Аудит сайта", "price": 7900, "days": 3},
-    {"slug": "logo-design", "title": "Дизайн логотипа", "price": 12000, "days": 5},
+    {
+        "id": 1,
+        "slug": "audit-sayta",
+        "title": "Аудит сайта",
+        "price": 7900,
+        "days": 3,
+        "description": "Полный технический аудит.\nСкорость, SEO, доступность.",
+    },
+    {
+        "id": 2,
+        "slug": "logo-design",
+        "title": "Дизайн логотипа",
+        "price": 12000,
+        "days": 5,
+        "description": "Три концепции логотипа.\nПравки до утверждения.",
+    },
 ]
 
 
@@ -25,20 +39,16 @@ def service_list(request):
         f"<li>{s['title']} — {s['price']} ₽, {s['days']} дн.</li>"
         for s in services
     )
-    return HttpResponse(f"<h1>Услуги</h1><ul>{items}</ul>")
+    # return HttpResponse(f"<h1>Услуги</h1><ul>{items}</ul>")
+    return render(request, "catalog/service_list.html", {"services": services})
 
 
 def service_detail(request, slug):
     # Look the service up by slug; no match means a 404 page
     for item in SERVICES:
         if item["slug"] == slug:
-            return HttpResponse(
-                f"<h1>{item['title']}</h1>"
-                f"<p>Цена: {item['price']} ₽</p>"
-                f"<p>Срок: {item['days']} дн.</p>"
-            )
+            return render(request, "catalog/service_detail.html", {"service": item})
     raise Http404("Услуга не найдена")
-
 
 def category_detail(request, slug):
     # For now just show the category slug taken from the URL
