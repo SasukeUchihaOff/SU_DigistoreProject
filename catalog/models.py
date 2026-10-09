@@ -1,7 +1,7 @@
-from django.db import models
-from django.urls import reverse
 from django.conf import settings
 from django.core.validators import MinValueValidator, MaxValueValidator
+from django.db import models
+from django.urls import reverse
 
 
 class Category(models.Model):
@@ -19,6 +19,14 @@ class Category(models.Model):
 
     def get_absolute_url(self):
         return reverse("catalog:category_detail", kwargs={"slug": self.slug})
+
+
+class ServiceQuerySet(models.QuerySet):
+    def active(self):
+        return self.filter(is_active=True)
+
+    def cheaper_than(self, amount):
+        return self.filter(price__lte=amount)
 
 
 class Service(models.Model):
@@ -48,6 +56,8 @@ class Service(models.Model):
     is_active = models.BooleanField("Опубликована", default=True)
     created_at = models.DateTimeField(auto_now_add=True)
 
+    objects = ServiceQuerySet.as_manager()
+
     class Meta:
         verbose_name = "услуга"
         verbose_name_plural = "услуги"
@@ -62,6 +72,7 @@ class Service(models.Model):
 
     def get_absolute_url(self):
         return reverse("catalog:service_detail", kwargs={"slug": self.slug})
+
 
 class Review(models.Model):
     # CASCADE: reviews make no sense without their service
@@ -97,7 +108,8 @@ class Review(models.Model):
 
     def __str__(self):
         return f"{self.service} - {self.rating}/5"
-    
+
+
 class ServicePlan(models.Model):
     service = models.ForeignKey(
         Service,
