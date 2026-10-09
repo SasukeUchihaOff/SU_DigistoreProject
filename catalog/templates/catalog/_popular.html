@@ -1,0 +1,12 @@
+{% load catalog_extras  %}
+<section class="popular">
+  <h3>Популярные услуги</h3>
+  <ul>
+    {% for service in services %}
+      <li>
+        <a href="{% url 'catalog:service_detail' service.slug %}">{{ service.title }}</a>
+        — {{ service.price|rubles }}
+      </li>
+    {% endfor %}
+  </ul>
+</section>

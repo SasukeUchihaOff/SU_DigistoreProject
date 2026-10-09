@@ -1,4 +1,5 @@
 from django import template
+from catalog.views import SERVICES
 
 register = template.Library()
 
@@ -29,3 +30,9 @@ def days_ru(value):
     else:
         word = "дней"
     return f"{n} {word}"
+
+
+@register.inclusion_tag("catalog/_popular.html")
+def popular_services(count=3):
+    # For now "popular" means the first `count` services of the list
+    return {"services": SERVICES[:count]}

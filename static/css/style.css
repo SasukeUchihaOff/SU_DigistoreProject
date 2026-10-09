@@ -47,3 +47,24 @@ footer {
   padding: 24px;
   color: #666;
 }
+/* Two columns: content + sidebar */
+.layout {
+  max-width: 960px;
+  margin: 24px auto;
+  padding: 0 16px;
+  display: grid;
+  grid-template-columns: 1fr 240px;
+  gap: 24px;
+}
+
+.layout main {
+  margin: 0;
+  padding: 0;
+  max-width: none;
+}
+
+.popular {
+  border: 1px solid #ddd;
+  border-radius: 8px;
+  padding: 16px;
+}
