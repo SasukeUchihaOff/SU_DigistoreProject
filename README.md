@@ -1,13 +1,32 @@
-# Проект интернет-магазина цифровых услуг от Sasuke Uchiha
+# DigiStore — интернет-магазин цифровых услуг
 
-Интернет-магазин на django
+Учебный проект на Django. Автор: Sasuke Uchiha.
 
-Для установки зависимостей выполнить:
+## Стек
+
+- Python 3.10+
+- Django 5.2
+- SQLite
+
+## Установка и запуск
+
+1. Клонируйте репозиторий и перейдите в папку проекта:
 ```commandline
-pip install -r requirements.txt
+   git clone <ссылка на репозиторий>
+   cd SU_DigistoreProject
 ```
-
-Для запуска выполнить:
+2. Создайте и активируйте виртуальное окружение:
 ```commandline
-python manage.py runserver
+   python -m venv venv
+   venv\Scripts\activate          # Windows
+   source venv/bin/activate       # Linux / macOS
 ```
+3. Установите зависимости:
+```commandline
+   pip install -r requirements.txt
+```
+4. Запустите сервер:
+```commandline
+   python manage.py runserver
+```
+5. Откройте http://127.0.0.1:8000/
